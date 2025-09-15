@@ -17,10 +17,10 @@ signal loss
 @export var input_right = "right"
 @export var input_left = "left"
 
-var grid = [6, 1, 1, 8, 
-			6, 1, 0, 0, 
-			1, 0, 0, 0, 
-			0, 0, 1, 0]
+@export var grid = [0, 0, 0, 0, 
+					0, 0, 0, 0, 
+					0, 0, 0, 0, 
+					0, 0, 0, 0]
 
 var filled = []
 
