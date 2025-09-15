@@ -228,12 +228,16 @@ func spawn_new():
 
 func emit_right_signal(slot):
 	match slot:
-		1:
-			emit_signal("merged_1")
-		2:
-			emit_signal("merged_2")
-		3:
-			emit_signal("merged_3")
+		1:emit_signal("merged_1")
+		2:emit_signal("merged_2")
+		3:emit_signal("merged_3")
+		4:emit_signal("merged_4")
+		5:emit_signal("merged_5")
+		6:emit_signal("merged_6")
+		7:emit_signal("merged_7")
+		8:emit_signal("merged_8")
+		9:emit_signal("merged_9")
+		10:emit_signal("merged_10")
 
 
 func check_filled_slots():
