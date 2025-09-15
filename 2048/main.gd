@@ -17,8 +17,8 @@ signal loss
 @export var input_right = "right"
 @export var input_left = "left"
 
-var grid = [1, 1, 1, 0, 
-			0, 1, 0, 0, 
+var grid = [6, 1, 1, 8, 
+			6, 1, 0, 0, 
 			1, 0, 0, 0, 
 			0, 0, 1, 0]
 
@@ -270,18 +270,16 @@ func visualize():
 	
 	for i in filled.size():
 		match grid[filled[i]]:
-			1:
-				summon(filled[i], block1)
-			2:
-				summon(filled[i], block2)
-			3:
-				summon(filled[i], block3)
-			4:
-				summon(filled[i], block4)
-			5:
-				summon(filled[i], block5)
-			6:
-				summon(filled[i], block6)
+			1:summon(filled[i], block1)
+			2:summon(filled[i], block2)
+			3:summon(filled[i], block3)
+			4:summon(filled[i], block4)
+			5:summon(filled[i], block5)
+			6:summon(filled[i], block6)
+			7:summon(filled[i], block7)
+			8:summon(filled[i], block8)
+			9:summon(filled[i], block9)
+			10:summon(filled[i], block10)
 
 
 func summon(order_num:int, type_of_block):
