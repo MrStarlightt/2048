@@ -13,6 +13,11 @@ signal merged_10
 
 signal loss
 
+@export var input_up = "up"
+@export var input_down = "down"
+@export var input_right = "right"
+@export var input_left = "left"
+
 var grid = [0, 1, 0, 0, 
 			0, 1, 0, 0, 
 			0, 0, 0, 0, 
@@ -52,19 +57,19 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	
-	if Input.is_action_just_pressed("up"):
+	if Input.is_action_just_pressed(input_up):
 		ultimate_move_func("y", "positive")
 		spawn_new()
 	
-	if Input.is_action_just_pressed("down"):
+	if Input.is_action_just_pressed(input_down):
 		ultimate_move_func("y", "negative")
 		spawn_new()
 	
-	if Input.is_action_just_pressed("right"):
+	if Input.is_action_just_pressed(input_right):
 		ultimate_move_func("x", "negative")
 		spawn_new()
 	
-	if Input.is_action_just_pressed("left"):
+	if Input.is_action_just_pressed(input_left):
 		ultimate_move_func("x", "positive")
 		spawn_new()
 
@@ -274,7 +279,7 @@ func visualize():
 func summon(order_num:int, type_of_block):
 	var object = type_of_block.instantiate()
 	object.global_position = $Node2D.get_child(order_num).global_position
-	
+	object.scale = scale
 	$blocks.add_child(object)
 
 
