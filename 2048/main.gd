@@ -9,7 +9,6 @@ signal merged_6
 signal merged_7
 signal merged_8
 signal merged_9
-signal merged_10
 
 signal loss
 
@@ -18,10 +17,10 @@ signal loss
 @export var input_right = "right"
 @export var input_left = "left"
 
-var grid = [0, 1, 0, 0, 
+var grid = [1, 1, 1, 0, 
 			0, 1, 0, 0, 
-			0, 0, 0, 0, 
-			0, 0, 0, 0]
+			1, 0, 0, 0, 
+			0, 0, 1, 0]
 
 var filled = []
 
@@ -137,6 +136,8 @@ func ultimate_move_func(axis, dir):
 				grid[axis[i][v_2]] += 1
 				grid[axis[i][v_3]] = 0
 				
+				emit_right_signal(grid[axis[i][v_1]])
+				
 			# slot 2 is empty
 			elif grid[axis[i][v_2]] == 0:
 				# slot 1 and 3 are same
@@ -145,6 +146,8 @@ func ultimate_move_func(axis, dir):
 					grid[axis[i][v_3]] = 0
 					
 					availability[0] = false
+					
+					emit_right_signal(grid[axis[i][v_1]])
 					
 				elif grid[axis[i][v_1]] == 0:
 					grid[axis[i][v_1]] = grid[axis[i][v_3]]
@@ -167,6 +170,8 @@ func ultimate_move_func(axis, dir):
 				grid[axis[i][v_3]] += 1
 				grid[axis[i][v_4]] = 0
 				
+				emit_right_signal(grid[axis[i][v_1]])
+				
 			# slot 3 is empty
 			elif grid[axis[i][v_3]] == 0:
 				
@@ -175,6 +180,8 @@ func ultimate_move_func(axis, dir):
 					grid[axis[i][v_2]] += 1
 					grid[axis[i][v_4]] = 0
 					availability[v_2] = false
+					
+					emit_right_signal(grid[axis[i][v_1]])
 				
 				# slot 2 is empty
 				elif grid[axis[i][v_2]] == 0:
@@ -184,6 +191,8 @@ func ultimate_move_func(axis, dir):
 						grid[axis[i][v_4]] = 0
 						
 						availability[v_1] = false
+						
+						emit_right_signal(grid[axis[i][v_1]])
 					
 					# slot 1 is empty
 					elif grid[axis[i][v_1]] == 0:
@@ -233,16 +242,15 @@ func spawn_new():
 
 func emit_right_signal(slot):
 	match slot:
-		1:emit_signal("merged_1")
-		2:emit_signal("merged_2")
-		3:emit_signal("merged_3")
-		4:emit_signal("merged_4")
-		5:emit_signal("merged_5")
-		6:emit_signal("merged_6")
-		7:emit_signal("merged_7")
-		8:emit_signal("merged_8")
-		9:emit_signal("merged_9")
-		10:emit_signal("merged_10")
+		2:emit_signal("merged_1")
+		3:emit_signal("merged_2")
+		4:emit_signal("merged_3")
+		5:emit_signal("merged_4")
+		6:emit_signal("merged_5")
+		7:emit_signal("merged_6")
+		8:emit_signal("merged_7")
+		9:emit_signal("merged_8")
+		10:emit_signal("merged_9")
 
 
 func check_filled_slots():
@@ -286,4 +294,3 @@ func summon(order_num:int, type_of_block):
 func reverse_summon():
 	for child in $blocks.get_children():
 		child.queue_free()
-	

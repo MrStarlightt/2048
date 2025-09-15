@@ -271,5 +271,3 @@ position = Vector2(565.25, 565.25)
 [node name="Camera2D" type="Camera2D" parent="."]
 
 [node name="blocks" type="Node" parent="."]
-
-[connection signal="loss" from="." to="ColorRect" method="_on_main_loss"]
