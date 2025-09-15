@@ -1,9 +1,9 @@
 extends Node2D
 
-var grid = [0, 0, 1, 2, 
-			1, 1, 2, 2, 
-			2, 0, 1, 1, 
-			1, 1, 0, 1]
+var grid = [0, 0, 0, 0, 
+			0, 1, 0, 0, 
+			0, 0, 0, 0, 
+			0, 0, 0, 0]
 
 var filled = []
 
@@ -19,23 +19,39 @@ var row_x_3 = [8,9,10,11]
 var row_x_4 = [12,13,14,15]
 var x_rows = [row_x_1,row_x_2,row_x_3,row_x_4]
 
-var direction = null
+var availability = [true, true, true, true]
+
+var first = preload("res://blocks/1.tscn")
+var second = preload("res://blocks/2.tscn")
+var third = preload("res://blocks/3.tscn")
+var fourth = preload("res://blocks/4.tscn")
+var fifth = preload("res://blocks/5.tscn")
+var sixth = preload("res://blocks/6.tscn")
+
 
 var i = 1
+
+func _ready() -> void:
+	visualize()
+
 
 func _input(event: InputEvent) -> void:
 	
 	if Input.is_action_just_pressed("up"):
 		move_up()
+		spawn_new()
 	
 	if Input.is_action_just_pressed("down"):
 		move_down()
+		spawn_new()
 	
 	if Input.is_action_just_pressed("right"):
 		move_righ()
+		spawn_new()
 	
 	if Input.is_action_just_pressed("left"):
 		move_left()
+		spawn_new()
 
 
 func move_up():
@@ -52,6 +68,8 @@ func move_up():
 			if grid[y_rows[i][0]] == grid[y_rows[i][1]]:
 				grid[y_rows[i][0]] += 1
 				grid[y_rows[i][1]] = 0
+				
+				availability[0] = false
 				
 			# earliest empty
 			elif grid[y_rows[i][0]] == 0:
@@ -74,9 +92,11 @@ func move_up():
 			# slot 2 is empty
 			elif grid[y_rows[i][1]] == 0:
 				# slot 1 and 3 are same
-				if grid[y_rows[i][0]] == grid[y_rows[i][2]]:
+				if grid[y_rows[i][0]] == grid[y_rows[i][2]] and availability[0] == true:
 					grid[y_rows[i][0]] += 1
 					grid[y_rows[i][2]] = 0
+					
+					availability[0] = false
 					
 				elif grid[y_rows[i][0]] == 0:
 					grid[y_rows[i][0]] = grid[y_rows[i][2]]
@@ -103,16 +123,19 @@ func move_up():
 			elif grid[y_rows[i][2]] == 0:
 				
 				# slot 2 and 4 are same
-				if grid[y_rows[i][1]] == grid[y_rows[i][3]]:
+				if grid[y_rows[i][1]] == grid[y_rows[i][3]] and availability[1] == true:
 					grid[y_rows[i][1]] += 1
 					grid[y_rows[i][3]] = 0
+					availability[1] = false
 				
 				# slot 2 is empty
 				elif grid[y_rows[i][1]] == 0:
 					# slot 1 and 4 are same
-					if grid[y_rows[i][0]] == grid[y_rows[i][3]]:
+					if grid[y_rows[i][0]] == grid[y_rows[i][3]] and availability[0] == true:
 						grid[y_rows[i][0]] += 1
 						grid[y_rows[i][3]] = 0
+						
+						availability[0] = false
 					
 					# slot 1 is empty
 					elif grid[y_rows[i][0]] == 0:
@@ -126,6 +149,11 @@ func move_up():
 				else:
 					grid[y_rows[i][2]] = grid[y_rows[i][3]]
 					grid[y_rows[i][3]] = 0
+	
+		availability[0] = true
+		availability[1] = true
+		availability[2] = true
+		availability[3] = true 
 
 func move_down():
 	
@@ -141,6 +169,8 @@ func move_down():
 			if grid[y_rows[i][3]] == grid[y_rows[i][2]]:
 				grid[y_rows[i][3]] += 1
 				grid[y_rows[i][2]] = 0
+				
+				availability[3] = false
 				
 			# 1 is empty
 			elif grid[y_rows[i][3]] == 0:
@@ -160,12 +190,16 @@ func move_down():
 				grid[y_rows[i][2]] += 1
 				grid[y_rows[i][1]] = 0
 				
+				availability[2] = false
+				
 			# slot 2 is empty
 			elif grid[y_rows[i][2]] == 0:
 				# slot 1 and 3 are same
-				if grid[y_rows[i][3]] == grid[y_rows[i][1]]:
+				if grid[y_rows[i][3]] == grid[y_rows[i][1]] and availability[3] == true:
 					grid[y_rows[i][3]] += 1
 					grid[y_rows[i][1]] = 0
+					
+					availability[3] = false
 					
 				elif grid[y_rows[i][3]] == 0:
 					grid[y_rows[i][3]] = grid[y_rows[i][1]]
@@ -192,14 +226,14 @@ func move_down():
 			elif grid[y_rows[i][1]] == 0:
 				
 				# slot 2 and 4 are same
-				if grid[y_rows[i][2]] == grid[y_rows[i][0]]:
+				if grid[y_rows[i][2]] == grid[y_rows[i][0]] and availability[2] == true:
 					grid[y_rows[i][2]] += 1
 					grid[y_rows[i][0]] = 0
 				
 				# slot 2 is empty
 				elif grid[y_rows[i][2]] == 0:
 					# slot 1 and 4 are same
-					if grid[y_rows[i][3]] == grid[y_rows[i][0]]:
+					if grid[y_rows[i][3]] == grid[y_rows[i][0]] and availability[3] == true:
 						grid[y_rows[i][3]] += 1
 						grid[y_rows[i][0]] = 0
 					
@@ -215,6 +249,11 @@ func move_down():
 				else:
 					grid[y_rows[i][1]] = grid[y_rows[i][0]]
 					grid[y_rows[i][0]] = 0
+	
+		availability[0] = true
+		availability[1] = true
+		availability[2] = true
+		availability[3] = true 
 
 func move_righ():
 		
@@ -230,6 +269,8 @@ func move_righ():
 			if grid[x_rows[i][3]] == grid[x_rows[i][2]]:
 				grid[x_rows[i][3]] += 1
 				grid[x_rows[i][2]] = 0
+				
+				availability[3] = false
 				
 			# 1 is empty
 			elif grid[x_rows[i][3]] == 0:
@@ -249,12 +290,16 @@ func move_righ():
 				grid[x_rows[i][2]] += 1
 				grid[x_rows[i][1]] = 0
 				
+				availability[2] = false
+				
 			# slot 2 is empty
 			elif grid[x_rows[i][2]] == 0:
 				# slot 1 and 3 are same
-				if grid[x_rows[i][3]] == grid[x_rows[i][1]]:
+				if grid[x_rows[i][3]] == grid[x_rows[i][1]] and availability[3] == true:
 					grid[x_rows[i][3]] += 1
 					grid[x_rows[i][1]] = 0
+					
+					availability[3] = false
 					
 				elif grid[x_rows[i][3]] == 0:
 					grid[x_rows[i][3]] = grid[x_rows[i][1]]
@@ -281,14 +326,14 @@ func move_righ():
 			elif grid[x_rows[i][1]] == 0:
 				
 				# slot 2 and 4 are same
-				if grid[x_rows[i][2]] == grid[x_rows[i][0]]:
+				if grid[x_rows[i][2]] == grid[x_rows[i][0]] and availability[2] == true:
 					grid[x_rows[i][2]] += 1
 					grid[x_rows[i][0]] = 0
 				
 				# slot 2 is empty
 				elif grid[x_rows[i][2]] == 0:
 					# slot 1 and 4 are same
-					if grid[x_rows[i][3]] == grid[x_rows[i][0]]:
+					if grid[x_rows[i][3]] == grid[x_rows[i][0]] and availability[3] == true:
 						grid[x_rows[i][3]] += 1
 						grid[x_rows[i][0]] = 0
 					
@@ -304,6 +349,11 @@ func move_righ():
 				else:
 					grid[x_rows[i][1]] = grid[x_rows[i][0]]
 					grid[x_rows[i][0]] = 0
+	
+		availability[0] = true
+		availability[1] = true
+		availability[2] = true
+		availability[3] = true 
 
 func move_left():
 	check_filled_slots()
@@ -318,6 +368,8 @@ func move_left():
 			if grid[x_rows[i][0]] == grid[x_rows[i][1]]:
 				grid[x_rows[i][0]] += 1
 				grid[x_rows[i][1]] = 0
+				
+				availability[0] = false
 				
 			# earliest empty
 			elif grid[x_rows[i][0]] == 0:
@@ -334,16 +386,20 @@ func move_left():
 			
 			# slot 2 and 3 are same
 			if grid[x_rows[i][1]] == grid[x_rows[i][2]]:
+				availability[1] = false
 				grid[x_rows[i][1]] += 1
 				grid[x_rows[i][2]] = 0
 				
 			# slot 2 is empty
 			elif grid[x_rows[i][1]] == 0:
 				# slot 1 and 3 are same
-				if grid[x_rows[i][0]] == grid[x_rows[i][2]]:
+				if grid[x_rows[i][0]] == grid[x_rows[i][2]] and availability[0] == true:
 					grid[x_rows[i][0]] += 1
 					grid[x_rows[i][2]] = 0
 					
+					availability[0] = false
+				
+				# slot 1 empty
 				elif grid[x_rows[i][0]] == 0:
 					grid[x_rows[i][0]] = grid[x_rows[i][2]]
 					grid[x_rows[i][2]] = 0
@@ -369,14 +425,14 @@ func move_left():
 			elif grid[x_rows[i][2]] == 0:
 				
 				# slot 2 and 4 are same
-				if grid[x_rows[i][1]] == grid[x_rows[i][3]]:
+				if grid[x_rows[i][1]] == grid[x_rows[i][3]] and availability[1] == true:
 					grid[x_rows[i][1]] += 1
 					grid[x_rows[i][3]] = 0
 				
 				# slot 2 is empty
 				elif grid[x_rows[i][1]] == 0:
 					# slot 1 and 4 are same
-					if grid[x_rows[i][0]] == grid[x_rows[i][3]]:
+					if grid[x_rows[i][0]] == grid[x_rows[i][3]] and availability[0] == true:
 						grid[x_rows[i][0]] += 1
 						grid[x_rows[i][3]] = 0
 					
@@ -392,88 +448,43 @@ func move_left():
 				else:
 					grid[x_rows[i][2]] = grid[x_rows[i][3]]
 					grid[x_rows[i][3]] = 0
+	
+		availability[0] = true
+		availability[1] = true
+		availability[2] = true
+		availability[3] = true 
 
 
-func test():
+
+
+func spawn_new():
+	print("works spawn new function")
+	check_filled_slots()
 	
-	# check if the next slot is filled
-	if y_rows[i][1] in filled: # is filled
+	var rand_num = round(randf_range(0, 15))
+	var rand_rare = round(randf_range(1,4))
+	
+	var loop_destroyer_2000 = 0
+	
+	while true:
 		
-		# earlier is the same type
-		if grid[y_rows[i][1]] == grid[y_rows[i][1]]:
-			grid[y_rows[i][0]] += 1
-			grid[y_rows[i][1]] = 0
-			
-		# earliest empty
-		elif y_rows[i][0] == y_rows[i][1]:
-			grid[y_rows[i][0]] = grid[y_rows[i][1]]
-			grid[y_rows[i][1]] = 0
-			
-	
-	
-	
-	
-	## Third
-	# check if the next slot is filled
-	if y_rows[i][2] in filled: # is filled
-		
-		# slot 2 and 3 are same
-		if grid[y_rows[i][1]] == grid[y_rows[i][2]]:
-			grid[y_rows[i][1]] += 1
-			grid[y_rows[i][2]] = 0
-			
-		# slot 2 is empty
-		elif grid[y_rows[i][1]] == 0:
-			# slot 1 and 3 are same
-			if grid[y_rows[i][0]] == grid[y_rows[i][2]]:
-				grid[y_rows[i][0]] += 1
-				grid[y_rows[i][2]] = 0
-				
-			elif grid[y_rows[i][0]] == 0:
-				grid[y_rows[i][0]] = grid[y_rows[i][2]]
-				grid[y_rows[i][2]] = 0
-				
+		if int(rand_num) in filled:
+			rand_num = round(randf_range(-0.5, 15.4))
+			loop_destroyer_2000 += 1
+			if loop_destroyer_2000 == 20000:
+				#Häviö
+				break
+		else:
+			loop_destroyer_2000 = 0
+			print(rand_num)
+			if rand_rare == 4:
+				grid[rand_num] = 2
 			else:
-				grid[y_rows[i][1]] = grid[y_rows[i][2]]
-				grid[y_rows[i][2]] = 0
+				grid[rand_num] = 1
+			break
 	
-	
-	
-	
-	## Fourth
-	# check if the next slot is filled
-	if y_rows[i][3] in filled: # is filled
-		
-		
-		# slot 3 and 4 are same
-		if grid[y_rows[i][2]] == grid[y_rows[i][3]]:
-			grid[y_rows[i][2]] += 1
-			grid[y_rows[i][3]] = 0
-			
-		# slot 3 is empty
-		elif grid[y_rows[i][2]] == 0:
-			
-			# slot 2 and 3 are same
-			if grid[y_rows[i][1]] == grid[y_rows[i][3]]:
-				grid[y_rows[i][1]] += 1
-				grid[y_rows[i][3]] = 0
-			
-			# slot 2 is empty
-			elif grid[y_rows[i][1]] == 0:
-				# slot 1 and 4 are same
-				if grid[y_rows[i][0]] == grid[y_rows[i][3]]:
-					grid[y_rows[i][0]] += 1
-					grid[y_rows[i][3]] = 0
-				
-				# slot 1 is empty
-				elif grid[y_rows[i][0]] == 0:
-					grid[y_rows[i][0]] = grid[y_rows[i][3]]
-					grid[y_rows[i][3]] = 0
-				
-				else:
-					
-					grid[y_rows[i][1]] = grid[y_rows[i][3]]
-					grid[y_rows[i][3]] = 0
+	visualize()
+
 
 func check_filled_slots():
 	
@@ -487,7 +498,27 @@ func check_filled_slots():
 	print(filled)
 
 
-
+func visualize():
+	check_filled_slots()
+	
+	reverse_summon()
+	
+	for i in filled.size():
+		#print("visualize loop works" + " " + str(i))
+		#print($Node2D.get_child(i))
+		match grid[filled[i]]:
+			1:
+				summon(filled[i], first)
+			2:
+				summon(filled[i], second)
+			3:
+				summon(filled[i], third)
+			4:
+				summon(filled[i], fourth)
+			5:
+				summon(filled[i], fifth)
+			6:
+				summon(filled[i], sixth)
 
 
 func print_grid():
@@ -497,5 +528,17 @@ func print_grid():
 	print(grid[12]," ",grid[13], " ", grid[14]," ",grid[15])
 
 
+func summon(order_num:int, type_of_block):
+	var object = type_of_block.instantiate()
+	object.global_position = $Node2D.get_child(order_num).global_position
+	
+	$blocks.add_child(object)
+
+func reverse_summon():
+	for child in $blocks.get_children():
+		child.queue_free()
+
 func _on_button_pressed() -> void:
+	spawn_new()
 	print_grid()
+	
