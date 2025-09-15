@@ -268,6 +268,4 @@ position = Vector2(403.75, 565.25)
 [node name="Node2D16" type="Node2D" parent="Node2D"]
 position = Vector2(565.25, 565.25)
 
-[node name="Camera2D" type="Camera2D" parent="."]
-
 [node name="blocks" type="Node" parent="."]
